@@ -1,12 +1,11 @@
 package hudson.plugins.redmine;
 
 import hudson.MarkupText;
-import hudson.plugins.redmine.RedmineLinkAnnotator;
 import junit.framework.TestCase;
 
 public class RedmineLinkAnnotatorTest extends TestCase {
 
-	private static final String REDMINE_URL = "http://local.redmine/";
+    private static final String REDMINE_URL = "http://local.redmine/";
 
     public void testWikiLinkSyntax() {
         assertAnnotatedTextEquals("Nothing here.", "Nothing here.");
@@ -62,12 +61,18 @@ public class RedmineLinkAnnotatorTest extends TestCase {
         assertAnnotatedTextEquals("IssueID #1 #11", 
                                   "<a href='" + REDMINE_URL + "issues/1'>IssueID #1</a> " +
                                   "<a href='" + REDMINE_URL + "issues/11'>#11</a>");
+        
+        assertAnnotatedTextEquals("Fixes #123", "<a href='" + REDMINE_URL + "issues/123'>Fixes #123</a>");  // ignore case
+        
+        assertAnnotatedTextEquals("fixes #123 This is a commit message.", "<a href='" + REDMINE_URL + "issues/123'>fixes #123</a> This is a commit message.");
+        assertAnnotatedTextEquals("This is a commit message. fixes #123", "This is a commit message. <a href='" + REDMINE_URL + "issues/123'>fixes #123</a>");
+        assertAnnotatedTextEquals("This is a commit message with fixes #123 in between.", "This is a commit message with <a href='" + REDMINE_URL + "issues/123'>fixes #123</a> in between.");
     }
 
     private void assertAnnotatedTextEquals(String originalText, String expectedAnnotatedText) {
         MarkupText markupText = new MarkupText(originalText);
-        for (RedmineLinkAnnotator.LinkMarkup markup : RedmineLinkAnnotator.MARKUPS) {
-            markup.process(markupText, REDMINE_URL);
+        for (RedmineLinkAnnotator.LinkMarkup markup : RedmineLinkAnnotator.buildLinkMarkups(null, null)) {
+            markup.process(markupText, REDMINE_URL, null);
         }
 
         System.out.println(markupText.toString(true));

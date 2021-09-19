@@ -14,26 +14,34 @@ import org.kohsuke.stapler.QueryParameter;
  *
  */
 public class RedmineWebsiteConfig extends AbstractDescribableImpl<RedmineWebsiteConfig> {
-	public String name;
-	public String baseUrl;
-	public String versionNumber;
-	
-	/**
-	 * Constructor; params shouldnt be null
-	 * 
-	 * @param baseUrl
-	 * @param versionNumber
-	 */
-	@DataBoundConstructor
-	public RedmineWebsiteConfig(String name, String baseUrl, String versionNumber) {
-		this.name = name;
-		this.baseUrl = baseUrl;
-		if (!this.baseUrl.endsWith("/")) {
-			this.baseUrl += '/';
-		}
-		this.versionNumber = versionNumber;
-	}
-	
+    public String name;
+    public String baseUrl;
+    public String versionNumber;
+    public String referencingKeywords;
+    
+    final RedmineLinkAnnotator.LinkMarkup[] linkMarkups;
+
+    /**
+     * Constructor; params shouldnt be null
+     * 
+     * @param name
+     * @param baseUrl
+     * @param versionNumber
+     * @param referencingKeywords
+     */
+    @DataBoundConstructor
+    public RedmineWebsiteConfig(String name, String baseUrl, String versionNumber, String referencingKeywords) {
+            this.name = name;
+            this.baseUrl = baseUrl;
+            if (!this.baseUrl.endsWith("/")) {
+                    this.baseUrl += '/';
+            }
+            this.versionNumber = versionNumber;
+            this.referencingKeywords = referencingKeywords;
+            
+            this.linkMarkups = RedmineLinkAnnotator.buildLinkMarkups(versionNumber, referencingKeywords);
+    }
+        
     @Extension
     public static class DescriptorImpl extends Descriptor<RedmineWebsiteConfig> {
         @Override
