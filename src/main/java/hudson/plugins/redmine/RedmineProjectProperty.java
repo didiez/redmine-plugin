@@ -34,23 +34,22 @@ import java.util.Collections;
 public class RedmineProjectProperty extends JobProperty<Job<?, ?>> {
 
     private final String redmineWebsiteName;
-    /** actually a project identifier - project names in Redmine can have spaces */
-    public final String projectName;
+    public final String projectName;  // actually a project identifier - project names in Redmine can have spaces
 
     @DataBoundConstructor
     public RedmineProjectProperty(String redmineWebsiteName, String projectName) {
         this.redmineWebsiteName = redmineWebsiteName;
         this.projectName = projectName;
-    }    
-    
+    }
+
     @Override
     public void setOwner(Job<?, ?> owner) {
-        // we have to add the action due to some kinds of jobs (p.e: WorkflowJob) not using getJobActions(..)
-        if(owner != null && !(owner instanceof AbstractProject)){
+        // we have to add the action due to some kinds of jobs not using getJobActions(job) (p.e: WorkflowJob)
+        if (owner != null && !(owner instanceof AbstractProject)) {
             owner.addAction(new RedmineLinkAction(this));
         }
         this.owner = owner;
-    }    
+    }
 
     @Override
     public Collection<? extends Action> getJobActions(Job<?, ?> job) {
@@ -63,8 +62,8 @@ public class RedmineProjectProperty extends JobProperty<Job<?, ?>> {
         }
 
         RedmineWebsiteConfig foundRedmine = null;
-        for (RedmineWebsiteConfig redmineConfig :  DESCRIPTOR.getRedmineWebsites()) {
-            if (redmineConfig.getName().equals(redmineWebsiteName)){
+        for (RedmineWebsiteConfig redmineConfig : DESCRIPTOR.getRedmineWebsites()) {
+            if (redmineConfig.getName().equals(redmineWebsiteName)) {
                 foundRedmine = redmineConfig;
                 break;
             }
@@ -81,6 +80,7 @@ public class RedmineProjectProperty extends JobProperty<Job<?, ?>> {
     public static final DescriptorImpl DESCRIPTOR = new DescriptorImpl();
 
     public static final class DescriptorImpl extends JobPropertyDescriptor {
+
         private final CopyOnWriteList<RedmineWebsiteConfig> redmineWebsites = new CopyOnWriteList<RedmineWebsiteConfig>();
 
         public DescriptorImpl() {
@@ -112,7 +112,7 @@ public class RedmineProjectProperty extends JobProperty<Job<?, ?>> {
 
                 public boolean evaluate(Object object) {
                     String examinedName = ((RedmineWebsiteConfig) object).getName();
-                    if (redmineNames.contains(examinedName)){
+                    if (redmineNames.contains(examinedName)) {
                         return false;
                     }
                     redmineNames.add(examinedName);
@@ -128,7 +128,7 @@ public class RedmineProjectProperty extends JobProperty<Job<?, ?>> {
 
         @Override
         public JobProperty<?> newInstance(StaplerRequest req, JSONObject formData) throws FormException {
-            if (formData.containsKey("redmine")){
+            if (formData.containsKey("redmine")) {
                 JSONObject redmineJson = formData.getJSONObject("redmine");
                 if (!StringUtils.isBlank(redmineJson.optString("redmineWebsiteName"))
                         && !StringUtils.isBlank(redmineJson.optString("projectName"))) {

@@ -15,8 +15,6 @@ import hudson.util.Secret;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -24,115 +22,115 @@ import org.kohsuke.stapler.QueryParameter;
 
 public class RedmineMetricsPublisher extends Publisher {
 
-	private Secret apiKey;
-	private String targetVersion;
-	private String ignoreTicketTracker;
-	private String ignoreTicketStatus;
+    private Secret apiKey;
+    private String targetVersion;
+    private String ignoreTicketTracker;
+    private String ignoreTicketStatus;
 
-	@SuppressWarnings("deprecation")
-	@DataBoundConstructor
-	public RedmineMetricsPublisher(String apiKey, String targetVersion, String ignoreTicketTracker,
-			String ignoreTicketStatus) {
-		this.apiKey = Secret.fromString(Util.fixEmptyAndTrim(apiKey));
-		this.targetVersion = targetVersion;
-		this.ignoreTicketTracker = ignoreTicketTracker;
-		this.ignoreTicketStatus = ignoreTicketStatus;
-	}
+    @SuppressWarnings("deprecation")
+    @DataBoundConstructor
+    public RedmineMetricsPublisher(String apiKey, String targetVersion, String ignoreTicketTracker,
+            String ignoreTicketStatus) {
+        this.apiKey = Secret.fromString(Util.fixEmptyAndTrim(apiKey));
+        this.targetVersion = targetVersion;
+        this.ignoreTicketTracker = ignoreTicketTracker;
+        this.ignoreTicketStatus = ignoreTicketStatus;
+    }
 
-	@Override
-	public boolean perform(AbstractBuild<?, ?> build, Launcher launcher,
-			BuildListener listener) throws InterruptedException, IOException {
-		RedmineProjectProperty rpp = build.getProject().getProperty(RedmineProjectProperty.class);
-        if(rpp == null || rpp.getRedmineWebsite() == null) { // not configured
-            return false; 
+    @Override
+    public boolean perform(AbstractBuild<?, ?> build, Launcher launcher,
+            BuildListener listener) throws InterruptedException, IOException {
+        RedmineProjectProperty rpp = build.getProject().getProperty(RedmineProjectProperty.class);
+        if (rpp == null || rpp.getRedmineWebsite() == null) { // not configured
+            return false;
         }
 
         PrintStream logger = listener.getLogger();
-		
-		RedmineMetricsCalculator calculator = new RedmineMetricsCalculator(rpp.getRedmineWebsite().getBaseUrl(),
-				apiKey.getPlainText(), rpp.projectName, targetVersion, ignoreTicketTracker,
-				ignoreTicketStatus);
-		try {
-			List<MetricsResult> metricsList = calculator.calc();
-			MetricsAction metricsAction = new MetricsAction(build, metricsList);
-			build.addAction(metricsAction);
-		} catch (MetricsException e) {
-			logger.println(e);
-			return false;
-		}
 
-		return true;
-	}
+        RedmineMetricsCalculator calculator = new RedmineMetricsCalculator(rpp.getRedmineWebsite().getBaseUrl(),
+                apiKey.getPlainText(), rpp.projectName, targetVersion, ignoreTicketTracker,
+                ignoreTicketStatus);
+        try {
+            List<MetricsResult> metricsList = calculator.calc();
+            MetricsAction metricsAction = new MetricsAction(build, metricsList);
+            build.addAction(metricsAction);
+        } catch (MetricsException e) {
+            logger.println(e);
+            return false;
+        }
 
-	public BuildStepMonitor getRequiredMonitorService() {
-		return BuildStepMonitor.NONE;
-	}
+        return true;
+    }
 
-	public Secret getApiKey() {
-		return apiKey;
-	}
+    public BuildStepMonitor getRequiredMonitorService() {
+        return BuildStepMonitor.NONE;
+    }
 
-	public String getTargetVersion() {
-		return targetVersion;
-	}
-	
-	public String getIgnoreTicketTracker() {
-		return ignoreTicketTracker;
-	}
+    public Secret getApiKey() {
+        return apiKey;
+    }
 
-	public String getIgnoreTicketStatus() {
-		return ignoreTicketStatus;
-	}
+    public String getTargetVersion() {
+        return targetVersion;
+    }
 
-	@Override
-	public Action getProjectAction(AbstractProject<?, ?> project) {
-		return new MetricsProjectAction(project);
-	}
+    public String getIgnoreTicketTracker() {
+        return ignoreTicketTracker;
+    }
 
-	@Extension
-	public static class DescriptorImpl extends BuildStepDescriptor<Publisher> {
+    public String getIgnoreTicketStatus() {
+        return ignoreTicketStatus;
+    }
 
-		@SuppressWarnings("rawtypes")
-		@Override
-		public boolean isApplicable(Class<? extends AbstractProject> jobType) {
-			return true;
-		}
+    @Override
+    public Action getProjectAction(AbstractProject<?, ?> project) {
+        return new MetricsProjectAction(project);
+    }
 
-		public FormValidation doCheckUrl(@QueryParameter String url) {
-			if (url.length() == 0) {
-				return FormValidation.error(Messages
-						.error_require_redmine_url());
-			}
-			try {
-				new URL(url);
-			} catch (MalformedURLException e) {
-				return FormValidation.error(Messages
-						.error_invalid_redmine_url());
-			}
-			return FormValidation.ok();
-		}
+    @Extension
+    public static class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
-		public FormValidation doCheckApiKey(@QueryParameter String value) {
-			if (value.length() == 0) {
-				return FormValidation.error(Messages.error_require_api_key());
-			}
-			return FormValidation.ok();
-		}
+        @SuppressWarnings("rawtypes")
+        @Override
+        public boolean isApplicable(Class<? extends AbstractProject> jobType) {
+            return true;
+        }
 
-		public FormValidation doCheckProjectName(
-				@QueryParameter String projectName) {
-			if (projectName.length() == 0) {
-				return FormValidation.error(Messages
-						.error_require_project_name());
-			}
-			return FormValidation.ok();
-		}
+        public FormValidation doCheckUrl(@QueryParameter String url) {
+            if (url.length() == 0) {
+                return FormValidation.error(Messages
+                        .error_require_redmine_url());
+            }
+            try {
+                new URL(url);
+            } catch (MalformedURLException e) {
+                return FormValidation.error(Messages
+                        .error_invalid_redmine_url());
+            }
+            return FormValidation.ok();
+        }
 
-		@Override
-		public String getDisplayName() {
-			return Messages.aggregate_redmine_ticket_metrics();
-		}
+        public FormValidation doCheckApiKey(@QueryParameter String value) {
+            if (value.length() == 0) {
+                return FormValidation.error(Messages.error_require_api_key());
+            }
+            return FormValidation.ok();
+        }
 
-	}
+        public FormValidation doCheckProjectName(
+                @QueryParameter String projectName) {
+            if (projectName.length() == 0) {
+                return FormValidation.error(Messages
+                        .error_require_project_name());
+            }
+            return FormValidation.ok();
+        }
+
+        @Override
+        public String getDisplayName() {
+            return Messages.aggregate_redmine_ticket_metrics();
+        }
+
+    }
 
 }

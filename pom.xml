@@ -54,8 +54,8 @@
         <connection>scm:git:git://github.com/jenkinsci/redmine-plugin.git</connection>
         <developerConnection>scm:git:git@github.com:jenkinsci/redmine-plugin.git</developerConnection>
         <url>https://github.com/jenkinsci/redmine-plugin</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <dependencies>
         <dependency>

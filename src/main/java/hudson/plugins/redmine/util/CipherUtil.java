@@ -8,7 +8,9 @@ import java.security.MessageDigest;
  */
 public abstract class CipherUtil {
 
-    /** */
+    /**
+     *
+     */
     public static final String SHA1 = "SHA-1";
 
     /**

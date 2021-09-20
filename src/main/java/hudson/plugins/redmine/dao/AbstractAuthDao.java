@@ -10,16 +10,19 @@ import java.sql.Connection;
  */
 public abstract class AbstractAuthDao {
 
-    /** DB Connection */
+    /**
+     * DB Connection
+     */
     protected Connection conn = null;
 
     /**
      * DB Connection Open.
-     * @param dbServer     DB Server
-     * @param port         Database Port
+     *
+     * @param dbServer DB Server
+     * @param port Database Port
      * @param databaseName Database Name
-     * @param dbUserName   Database UserName
-     * @param dbPassword   Database Password
+     * @param dbUserName Database UserName
+     * @param dbPassword Database Password
      * @throws RedmineAuthenticationException
      */
     public abstract void open(String dbServer, String port, String databaseName, String dbUserName, String dbPassword)
@@ -30,13 +33,17 @@ public abstract class AbstractAuthDao {
      */
     public void close() {
         if (conn != null) {
-            try { conn.close(); } catch (Exception e) {}
+            try {
+                conn.close();
+            } catch (Exception e) {
+            }
         }
     }
 
     /**
      * Table Check.
-     * @param  table
+     *
+     * @param table
      * @return
      * @throws RedmineAuthenticationException
      */
@@ -44,8 +51,9 @@ public abstract class AbstractAuthDao {
 
     /**
      * Field Check.
-     * @param  table
-     * @param  field
+     *
+     * @param table
+     * @param field
      * @return
      * @throws RedmineAuthenticationException
      */
@@ -53,11 +61,12 @@ public abstract class AbstractAuthDao {
 
     /**
      * Get RedmineUserData.
-     * @param  loginTable
-     * @param  userField
-     * @param  passField
-     * @param  saltField
-     * @param  username
+     *
+     * @param loginTable
+     * @param userField
+     * @param passField
+     * @param saltField
+     * @param username
      * @return
      * @throws RedmineAuthenticationException
      */

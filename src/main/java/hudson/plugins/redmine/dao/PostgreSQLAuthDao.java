@@ -41,12 +41,14 @@ public class PostgreSQLAuthDao extends AbstractAuthDao {
             state = conn.prepareStatement(query);
             results = state.executeQuery();
 
-            if (results == null)
+            if (results == null) {
                 return false;
+            }
 
             while (results.next()) {
-                if (results.getString(1).equals(table))
+                if (results.getString(1).equals(table)) {
                     return true;
+                }
             }
 
             return false;
@@ -58,10 +60,16 @@ public class PostgreSQLAuthDao extends AbstractAuthDao {
             throw new RedmineAuthenticationException("RedmineSecurity: Table Check Error", e);
         } finally {
             if (results != null) {
-                try { results.close(); } catch (Exception e) {}
+                try {
+                    results.close();
+                } catch (Exception e) {
+                }
             }
             if (state != null) {
-                try { state.close(); } catch (Exception e) {}
+                try {
+                    state.close();
+                } catch (Exception e) {
+                }
             }
         }
     }
@@ -80,12 +88,14 @@ public class PostgreSQLAuthDao extends AbstractAuthDao {
 
             results = state.executeQuery();
 
-            if (results == null)
+            if (results == null) {
                 return false;
+            }
 
             while (results.next()) {
-                if (results.getString(1).equals(field))
+                if (results.getString(1).equals(field)) {
                     return true;
+                }
             }
 
             return false;
@@ -97,10 +107,16 @@ public class PostgreSQLAuthDao extends AbstractAuthDao {
             throw new RedmineAuthenticationException("RedmineSecurity: Field Check Error", e);
         } finally {
             if (results != null) {
-                try { results.close(); } catch (Exception e) {}
+                try {
+                    results.close();
+                } catch (Exception e) {
+                }
             }
             if (state != null) {
-                try { state.close(); } catch (Exception e) {}
+                try {
+                    state.close();
+                } catch (Exception e) {
+                }
             }
         }
     }
@@ -119,20 +135,23 @@ public class PostgreSQLAuthDao extends AbstractAuthDao {
 
             results = state.executeQuery();
 
-            if (results == null)
+            if (results == null) {
                 return null;
+            }
 
             if (results.next()) {
                 RedmineUserData userData = new RedmineUserData();
                 userData.setUsername(results.getString(userField));
                 userData.setPassword(results.getString(passField));
 
-                if (!StringUtils.isBlank(saltField))
+                if (!StringUtils.isBlank(saltField)) {
                     userData.setSalt(results.getString(saltField));
+                }
 
                 return userData;
-            } else
+            } else {
                 return null;
+            }
         } catch (RedmineAuthenticationException e) {
             throw e;
         } catch (SQLException e) {
@@ -141,10 +160,16 @@ public class PostgreSQLAuthDao extends AbstractAuthDao {
             throw new RedmineAuthenticationException("RedmineSecurity: Query Error", e);
         } finally {
             if (results != null) {
-                try { results.close(); } catch (Exception e) {}
+                try {
+                    results.close();
+                } catch (Exception e) {
+                }
             }
             if (state != null) {
-                try { state.close(); } catch (Exception e) {}
+                try {
+                    state.close();
+                } catch (Exception e) {
+                }
             }
         }
     }

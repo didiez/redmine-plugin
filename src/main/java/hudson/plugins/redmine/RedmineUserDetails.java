@@ -5,7 +5,6 @@ import org.acegisecurity.userdetails.UserDetails;
 
 public class RedmineUserDetails implements UserDetails {
 
-    /** */
     private static final long serialVersionUID = 1L;
 
     private GrantedAuthority[] authorities;
@@ -29,13 +28,13 @@ public class RedmineUserDetails implements UserDetails {
     public RedmineUserDetails(String username, String password, boolean enabled,
             boolean accountNonExpired, boolean credentialsNonExpired,
             boolean accountNonLocked, GrantedAuthority[] authorities) {
-        this.username              = username;
-        this.password              = password;
-        this.enabled               = enabled;
-        this.accountNotExpired     = accountNonExpired;
+        this.username = username;
+        this.password = password;
+        this.enabled = enabled;
+        this.accountNotExpired = accountNonExpired;
         this.credentialsNotExpired = credentialsNonExpired;
-        this.accountNotLocked      = accountNonLocked;
-        this.authorities           = authorities;
+        this.accountNotLocked = accountNonLocked;
+        this.authorities = authorities;
     }
 
     public GrantedAuthority[] getAuthorities() {

@@ -121,11 +121,14 @@ public class RedmineLinkAnnotator extends ChangeLogAnnotator {
 
         return new RedmineLinkAnnotator.LinkMarkup[]{
             new RedmineLinkAnnotator.LinkMarkup(
-            "(?i)(?:"+keywordsPattern+")#?NUM",
-            isVersionBefore120 ? "issues/show/$1" : "issues/$1"),
+                    "(?i)(?:" + keywordsPattern + ")#?NUM",
+                    isVersionBefore120 ? "issues/show/$1" : "issues/$1"
+            ),
             new RedmineLinkAnnotator.LinkMarkup(
-            "((?:[A-Z][a-z]+){2,})|wiki:ANYWORD",
-            "wiki/$1$2"),};
+                "((?:[A-Z][a-z]+){2,})|wiki:ANYWORD",
+                "wiki/$1$2"
+            )
+        };
     }
 
 }

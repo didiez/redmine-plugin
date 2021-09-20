@@ -84,37 +84,38 @@ public class RedmineSecurityRealm extends AbstractPasswordBasedSecurityRealm {
     public RedmineSecurityRealm(String dbms, String dbServer, String databaseName, String port, String dbUserName, String dbPassword,
             String version, String loginTable, String userField, String passField, String saltField) {
 
-        this.dbms         = StringUtils.isBlank(dbms)         ? Constants.DBMS_MYSQL              : dbms;
-        this.dbServer     = StringUtils.isBlank(dbServer)     ? Constants.DEFAULT_DB_SERVER       : dbServer;
-        this.databaseName = StringUtils.isBlank(databaseName) ? Constants.DEFAULT_DATABASE_NAME   : databaseName;
+        this.dbms = StringUtils.isBlank(dbms) ? Constants.DBMS_MYSQL : dbms;
+        this.dbServer = StringUtils.isBlank(dbServer) ? Constants.DEFAULT_DB_SERVER : dbServer;
+        this.databaseName = StringUtils.isBlank(databaseName) ? Constants.DEFAULT_DATABASE_NAME : databaseName;
 
-        if (StringUtils.isBlank(port))
+        if (StringUtils.isBlank(port)) {
             this.port = (Constants.DBMS_MYSQL.equals(this.dbms)) ? (Constants.DEFAULT_PORT_MYSQL) : (Constants.DBMS_POSTGRESQL);
-        else
+        } else {
             this.port = port;
+        }
 
-        this.dbUserName   = dbUserName;
-        this.dbPassword   = Secret.fromString(Util.fixEmptyAndTrim(dbPassword));
-        this.version      = StringUtils.isBlank(version)      ? Constants.VERSION_1_2_0           : version;
+        this.dbUserName = dbUserName;
+        this.dbPassword = Secret.fromString(Util.fixEmptyAndTrim(dbPassword));
+        this.version = StringUtils.isBlank(version) ? Constants.VERSION_1_2_0 : version;
 
-        this.loginTable   = StringUtils.isBlank(loginTable)   ? Constants.DEFAULT_LOGIN_TABLE     : loginTable;
-        this.userField    = StringUtils.isBlank(userField)    ? Constants.DEFAULT_USER_FIELD      : userField;
-        this.passField    = StringUtils.isBlank(passField)    ? Constants.DEFAULT_PASSWORD_FIELD  : passField;
-        this.saltField    = StringUtils.isBlank(saltField)    ? Constants.DEFAULT_SALT_FIELD      : saltField;
+        this.loginTable = StringUtils.isBlank(loginTable) ? Constants.DEFAULT_LOGIN_TABLE : loginTable;
+        this.userField = StringUtils.isBlank(userField) ? Constants.DEFAULT_USER_FIELD : userField;
+        this.passField = StringUtils.isBlank(passField) ? Constants.DEFAULT_PASSWORD_FIELD : passField;
+        this.saltField = StringUtils.isBlank(saltField) ? Constants.DEFAULT_SALT_FIELD : saltField;
     }
 
-
     public static final class DescriptorImpl extends Descriptor<SecurityRealm> {
+
         @Override
         public String getHelpFile() {
             return "/plugin/redmine/help-auth-overview.html";
         }
+
         @Override
         public String getDisplayName() {
             return Messages.RedmineSecurityRealm_DisplayName();
         }
     }
-
 
     @Extension
     public static DescriptorImpl install() {
@@ -126,6 +127,7 @@ public class RedmineSecurityRealm extends AbstractPasswordBasedSecurityRealm {
      * @author Yasuyuki Saito
      */
     class Authenticator extends AbstractUserDetailsAuthenticationProvider {
+
         @Override
         protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
 
@@ -156,11 +158,13 @@ public class RedmineSecurityRealm extends AbstractPasswordBasedSecurityRealm {
 
             dao.open(this.dbServer, this.port, this.databaseName, this.dbUserName, this.dbPassword.getPlainText());
 
-            if (!dao.isTable(this.loginTable))
+            if (!dao.isTable(this.loginTable)) {
                 throw new RedmineAuthenticationException("RedmineSecurity: Invalid Login Table");
+            }
 
-            if (!dao.isField(this.loginTable, this.userField))
+            if (!dao.isField(this.loginTable, this.userField)) {
                 throw new RedmineAuthenticationException("RedmineSecurity: Invalid User Field");
+            }
 
             RedmineUserData userData = dao.getRedmineUserData(this.loginTable, this.userField, this.passField, Constants.VERSION_1_2_0.equals(this.version) ? this.saltField : null, username);
 
@@ -173,7 +177,7 @@ public class RedmineSecurityRealm extends AbstractPasswordBasedSecurityRealm {
             if (Constants.VERSION_1_2_0.equals(this.version)) {
                 encryptedPassword = CipherUtil.encodeSHA1(userData.getSalt() + CipherUtil.encodeSHA1(password));
             } else if (Constants.VERSION_1_1_3.equals(this.version)) {
-                encryptedPassword =  CipherUtil.encodeSHA1(password);
+                encryptedPassword = CipherUtil.encodeSHA1(password);
             }
 
             LOGGER.info("Redmine Version   : " + this.version);
@@ -191,7 +195,9 @@ public class RedmineSecurityRealm extends AbstractPasswordBasedSecurityRealm {
         } catch (Exception e) {
             throw new RedmineAuthenticationException("RedmineSecurity: System.Exception", e);
         } finally {
-            if (dao != null) dao.close();
+            if (dao != null) {
+                dao.close();
+            }
         }
     }
 
@@ -204,11 +210,13 @@ public class RedmineSecurityRealm extends AbstractPasswordBasedSecurityRealm {
 
             dao.open(this.dbServer, this.port, this.databaseName, this.dbUserName, this.dbPassword.getPlainText());
 
-            if (!dao.isTable(this.loginTable))
+            if (!dao.isTable(this.loginTable)) {
                 throw new RedmineAuthenticationException("RedmineSecurity: Invalid Login Table");
+            }
 
-            if (!dao.isField(this.loginTable, this.userField))
+            if (!dao.isField(this.loginTable, this.userField)) {
                 throw new RedmineAuthenticationException("RedmineSecurity: Invalid User Field");
+            }
 
             RedmineUserData userData = dao.getRedmineUserData(this.loginTable, this.userField, this.passField, Constants.VERSION_1_2_0.equals(this.version) ? this.saltField : null, username);
 
@@ -223,22 +231,26 @@ public class RedmineSecurityRealm extends AbstractPasswordBasedSecurityRealm {
         } catch (Exception e) {
             throw new RedmineAuthenticationException("RedmineSecurity: System.Exception", e);
         } finally {
-            if (dao != null) dao.close();
+            if (dao != null) {
+                dao.close();
+            }
         }
     }
 
     /**
      * Create Auth Dao
-     * @param  dbms
+     *
+     * @param dbms
      * @return
      */
     private AbstractAuthDao createAuthDao(String dbms) {
-        if (Constants.DBMS_MYSQL.equals(dbms))
+        if (Constants.DBMS_MYSQL.equals(dbms)) {
             return new MySQLAuthDao();
-        else if (Constants.DBMS_POSTGRESQL.equals(dbms))
+        } else if (Constants.DBMS_POSTGRESQL.equals(dbms)) {
             return new PostgreSQLAuthDao();
-        else
+        } else {
             return null;
+        }
     }
 
     @Override
@@ -257,7 +269,6 @@ public class RedmineSecurityRealm extends AbstractPasswordBasedSecurityRealm {
         groups.add(SecurityRealm.AUTHENTICATED_AUTHORITY);
         return new RedmineUserDetails(username, password, true, true, true, true, groups.toArray(new GrantedAuthority[groups.size()]));
     }
-
 
     /**
      *
