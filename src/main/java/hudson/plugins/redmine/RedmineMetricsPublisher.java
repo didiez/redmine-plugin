@@ -49,7 +49,7 @@ public class RedmineMetricsPublisher extends Publisher {
 
         PrintStream logger = listener.getLogger();
 		
-		RedmineMetricsCalculator calculator = new RedmineMetricsCalculator(rpp.getRedmineWebsite().baseUrl,
+		RedmineMetricsCalculator calculator = new RedmineMetricsCalculator(rpp.getRedmineWebsite().getBaseUrl(),
 				apiKey.getPlainText(), rpp.projectName, targetVersion, ignoreTicketTracker,
 				ignoreTicketStatus);
 		try {

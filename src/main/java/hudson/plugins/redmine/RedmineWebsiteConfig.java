@@ -6,6 +6,7 @@ import hudson.model.Descriptor;
 import hudson.util.FormValidation;
 
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
 
 /**
@@ -14,12 +15,12 @@ import org.kohsuke.stapler.QueryParameter;
  *
  */
 public class RedmineWebsiteConfig extends AbstractDescribableImpl<RedmineWebsiteConfig> {
-    public String name;
-    public String baseUrl;
-    public String versionNumber;
-    public String referencingKeywords;
+    private String name;
+    private String baseUrl;
+    private String versionNumber;
+    private String referencingKeywords;
     
-    final RedmineLinkAnnotator.LinkMarkup[] linkMarkups;
+    RedmineLinkAnnotator.LinkMarkup[] linkMarkups;
 
     /**
      * Constructor; params shouldnt be null
@@ -41,7 +42,46 @@ public class RedmineWebsiteConfig extends AbstractDescribableImpl<RedmineWebsite
             
             this.linkMarkups = RedmineLinkAnnotator.buildLinkMarkups(versionNumber, referencingKeywords);
     }
-        
+
+    public String getName() {
+        return name;
+    }   
+    
+    @DataBoundSetter
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+    
+    @DataBoundSetter
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+    
+    public String getVersionNumber() {
+        return versionNumber;
+    }
+
+    @DataBoundSetter
+    public void setVersionNumber(String versionNumber) {
+        this.versionNumber = versionNumber;
+        this.linkMarkups = RedmineLinkAnnotator.buildLinkMarkups(versionNumber, referencingKeywords);
+    }
+
+    public String getReferencingKeywords() {
+        return referencingKeywords;
+    }
+    
+    @DataBoundSetter
+    public void setReferencingKeywords(String referencingKeywords) {
+        this.referencingKeywords = referencingKeywords;
+        this.linkMarkups = RedmineLinkAnnotator.buildLinkMarkups(versionNumber, referencingKeywords);
+    }
+    
+    
     @Extension
     public static class DescriptorImpl extends Descriptor<RedmineWebsiteConfig> {
         @Override

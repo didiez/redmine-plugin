@@ -104,7 +104,7 @@ public class RedmineRepositoryBrowser extends SubversionRepositoryBrowser {
 		if(rpp == null) {
 			return null;
 		} else {
-			return new URL(rpp.getRedmineWebsite().baseUrl);
+			return new URL(rpp.getRedmineWebsite().getBaseUrl());
 		}
 	}
 
@@ -127,20 +127,20 @@ public class RedmineRepositoryBrowser extends SubversionRepositoryBrowser {
 	* @throws MalformedURLException
 	*/
 	private URL getRedmineProjectURL(LogEntry logEntry) throws MalformedURLException {
-		AbstractProject<?,?> p = (AbstractProject<?,?>)logEntry.getParent().build.getProject();
-		RedmineProjectProperty rpp = p.getProperty(RedmineProjectProperty.class);
-		String url;
-		if(rpp == null || rpp.getRedmineWebsite() == null) {
-			url = "";
-		} else {
-			// NOTE: we force the website string to have a trailing slash in the constructor
-			url = rpp.getRedmineWebsite().baseUrl;
-			if (rpp.projectName != null) {
-				url += "projects/" + rpp.projectName + "/";
-			}
+	    AbstractProject<?, ?> p = (AbstractProject<?, ?>) logEntry.getParent().build.getProject();
+	    RedmineProjectProperty rpp = p.getProperty(RedmineProjectProperty.class);
+	    String url;
+	    if (rpp == null || rpp.getRedmineWebsite() == null) {
+		return null;
+	    } else {
+		// NOTE: we force the website string to have a trailing slash in the constructor
+		url = rpp.getRedmineWebsite().getBaseUrl();
+		if (rpp.projectName != null) {
+		    url += "projects/" + rpp.projectName + "/";
 		}
 		return new URL(url);
-	}	
+	    }
+	}
 
 	private String getRepositoryId(LogEntry logEntry) {
 		if (this.repositoryId == null || this.repositoryId.trim().length() == 0){
@@ -155,7 +155,7 @@ public class RedmineRepositoryBrowser extends SubversionRepositoryBrowser {
 		RedmineProjectProperty rpp = p.getProperty(RedmineProjectProperty.class);
 
 		String filePath = "";
-		if(VersionUtil.isVersionBefore081(rpp.getRedmineWebsite().versionNumber)) {
+		if(VersionUtil.isVersionBefore081(rpp.getRedmineWebsite().getVersionNumber())) {
 			String[] filePaths = fileFullPath.split("/");
 			filePath = "/";
 			if(filePaths.length > 2) {
@@ -180,7 +180,7 @@ public class RedmineRepositoryBrowser extends SubversionRepositoryBrowser {
 		}
 		AbstractProject<?, ?> p = parent.build.getProject();
 		RedmineProjectProperty rpp = p.getProperty(RedmineProjectProperty.class);
-		return rpp != null && VersionUtil.isVersionBefore090(rpp.getRedmineWebsite().versionNumber);
+		return rpp != null && VersionUtil.isVersionBefore090(rpp.getRedmineWebsite().getVersionNumber());
 	}
 
 

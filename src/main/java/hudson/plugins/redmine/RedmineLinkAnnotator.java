@@ -23,7 +23,7 @@ import org.apache.commons.lang.StringUtils;
 @Extension
 public class RedmineLinkAnnotator extends ChangeLogAnnotator {
 
-    public static String DEFAULT_REFERENCING_KEYWORDS = "*,refs,references,IssueID,fixes,closes";
+    public static final String DEFAULT_REFERENCING_KEYWORDS = "*,refs,references,IssueID,fixes,closes";
 
     @Override
     public void annotate(Run<?, ?> build, Entry change, MarkupText text) {
@@ -32,11 +32,11 @@ public class RedmineLinkAnnotator extends ChangeLogAnnotator {
             return;
         }
 
-        String url = rpp.getRedmineWebsite().baseUrl;
+        String url = rpp.getRedmineWebsite().getBaseUrl();
         LinkMarkup[] markups = rpp.getRedmineWebsite().linkMarkups;
 
         for (LinkMarkup markup : markups) {
-            markup.process(text, url, rpp.getRedmineWebsite().versionNumber);
+            markup.process(text, url, rpp.getRedmineWebsite().getVersionNumber());
         }
     }
 

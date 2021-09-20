@@ -64,7 +64,7 @@ public class RedmineProjectProperty extends JobProperty<Job<?, ?>> {
 
         RedmineWebsiteConfig foundRedmine = null;
         for (RedmineWebsiteConfig redmineConfig :  DESCRIPTOR.getRedmineWebsites()) {
-            if (redmineConfig.name.equals(redmineWebsiteName)){
+            if (redmineConfig.getName().equals(redmineWebsiteName)){
                 foundRedmine = redmineConfig;
                 break;
             }
@@ -103,15 +103,15 @@ public class RedmineProjectProperty extends JobProperty<Job<?, ?>> {
                     formData.get("redmineWebsites"));
             CollectionUtils.filter(redmineSites, new Predicate() {
                 public boolean evaluate(Object object) {
-                    return StringUtils.isNotBlank(((RedmineWebsiteConfig) object).name)
-                            && StringUtils.isNotBlank(((RedmineWebsiteConfig) object).baseUrl);
+                    return StringUtils.isNotBlank(((RedmineWebsiteConfig) object).getName())
+                            && StringUtils.isNotBlank(((RedmineWebsiteConfig) object).getBaseUrl());
                 }
             });
             CollectionUtils.filter(redmineSites, new Predicate() {
                 Set<String> redmineNames = Sets.newHashSet();
 
                 public boolean evaluate(Object object) {
-                    String examinedName = ((RedmineWebsiteConfig) object).name;
+                    String examinedName = ((RedmineWebsiteConfig) object).getName();
                     if (redmineNames.contains(examinedName)){
                         return false;
                     }

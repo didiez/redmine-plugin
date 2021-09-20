@@ -14,7 +14,7 @@ public class RedmineLinkAction implements Action {
     }
 
     public String getIconFileName() {
-    	RedmineWebsiteConfig redmineConfig = prop.getRedmineWebsite();
+        RedmineWebsiteConfig redmineConfig = prop.getRedmineWebsite();
 		if (redmineConfig == null) {
 			return null;
 		} else {
@@ -31,7 +31,7 @@ public class RedmineLinkAction implements Action {
     	if (redmineConfig == null) {
     		return null;
     	} else {
-    		return redmineConfig.baseUrl + "projects/" + prop.projectName;
+    		return redmineConfig.getBaseUrl() + "projects/" + prop.projectName;
     	}
 	}
 }
