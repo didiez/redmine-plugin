@@ -41,10 +41,6 @@ public class PostgreSQLAuthDao extends AbstractAuthDao {
             state = conn.prepareStatement(query);
             results = state.executeQuery();
 
-            if (results == null) {
-                return false;
-            }
-
             while (results.next()) {
                 if (results.getString(1).equals(table)) {
                     return true;
@@ -88,10 +84,6 @@ public class PostgreSQLAuthDao extends AbstractAuthDao {
 
             results = state.executeQuery();
 
-            if (results == null) {
-                return false;
-            }
-
             while (results.next()) {
                 if (results.getString(1).equals(field)) {
                     return true;
@@ -134,10 +126,6 @@ public class PostgreSQLAuthDao extends AbstractAuthDao {
             state.setString(1, username);
 
             results = state.executeQuery();
-
-            if (results == null) {
-                return null;
-            }
 
             if (results.next()) {
                 RedmineUserData userData = new RedmineUserData();

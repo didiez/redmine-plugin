@@ -1,5 +1,6 @@
 package hudson.plugins.redmine.util;
 
+import com.google.common.base.Charsets;
 import java.security.MessageDigest;
 
 /**
@@ -34,7 +35,7 @@ public abstract class CipherUtil {
         try {
             MessageDigest md = MessageDigest.getInstance(algorithm);
             md.reset();
-            byte[] textBytes = value.getBytes();
+            byte[] textBytes = value.getBytes(Charsets.UTF_8);
             md.update(textBytes);
             byte[] digestBytes = md.digest();
 

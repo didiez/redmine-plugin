@@ -14,6 +14,7 @@ public class RedmineLinkAction implements Action {
         this.prop = prop;
     }
 
+    @Override
     public String getIconFileName() {
         RedmineWebsiteConfig redmineConfig = prop.getRedmineWebsite();
         if (redmineConfig == null) {
@@ -23,10 +24,12 @@ public class RedmineLinkAction implements Action {
         }
     }
 
+    @Override
     public String getDisplayName() {
         return "Redmine - " + prop.projectName;
     }
 
+    @Override
     public String getUrlName() {
         RedmineWebsiteConfig redmineConfig = prop.getRedmineWebsite();
         if (redmineConfig == null) {

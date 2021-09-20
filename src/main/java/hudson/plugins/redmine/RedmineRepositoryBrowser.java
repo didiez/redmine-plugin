@@ -156,22 +156,21 @@ public class RedmineRepositoryBrowser extends SubversionRepositoryBrowser {
         AbstractProject<?, ?> p = (AbstractProject<?, ?>) logEntry.getParent().build.getProject();
         RedmineProjectProperty rpp = p.getProperty(RedmineProjectProperty.class);
 
-        String filePath = "";
         if (VersionUtil.isVersionBefore081(rpp.getRedmineWebsite().getVersionNumber())) {
             String[] filePaths = fileFullPath.split("/");
-            filePath = "/";
+            StringBuilder filePath = new StringBuilder("/");
             if (filePaths.length > 2) {
                 for (int i = 2; i < filePaths.length; i++) {
-                    filePath = filePath + filePaths[i];
+                    filePath.append(filePaths[i]);
                     if (i != filePaths.length - 1) {
-                        filePath = filePath + "/";
+                        filePath.append("/");
                     }
                 }
             }
+            return filePath.toString();
         } else {
-            filePath = fileFullPath;
+            return fileFullPath;
         }
-        return filePath;
 
     }
 
@@ -194,6 +193,7 @@ public class RedmineRepositoryBrowser extends SubversionRepositoryBrowser {
             super(RedmineRepositoryBrowser.class);
         }
 
+        @Override
         public String getDisplayName() {
             return "Redmine";
         }

@@ -93,6 +93,7 @@ public class RedmineProjectProperty extends JobProperty<Job<?, ?>> {
             return true;
         }
 
+        @Override
         public String getDisplayName() {
             return "Associated Redmine website";
         }
@@ -102,6 +103,7 @@ public class RedmineProjectProperty extends JobProperty<Job<?, ?>> {
             List<RedmineWebsiteConfig> redmineSites = req.bindJSONToList(RedmineWebsiteConfig.class,
                     formData.get("redmineWebsites"));
             CollectionUtils.filter(redmineSites, new Predicate() {
+                @Override
                 public boolean evaluate(Object object) {
                     return StringUtils.isNotBlank(((RedmineWebsiteConfig) object).getName())
                             && StringUtils.isNotBlank(((RedmineWebsiteConfig) object).getBaseUrl());
@@ -110,6 +112,7 @@ public class RedmineProjectProperty extends JobProperty<Job<?, ?>> {
             CollectionUtils.filter(redmineSites, new Predicate() {
                 Set<String> redmineNames = Sets.newHashSet();
 
+                @Override
                 public boolean evaluate(Object object) {
                     String examinedName = ((RedmineWebsiteConfig) object).getName();
                     if (redmineNames.contains(examinedName)) {

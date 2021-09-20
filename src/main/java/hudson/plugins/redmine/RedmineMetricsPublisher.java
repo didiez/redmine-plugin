@@ -15,6 +15,8 @@ import hudson.util.Secret;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -62,6 +64,7 @@ public class RedmineMetricsPublisher extends Publisher {
         return true;
     }
 
+    @Override
     public BuildStepMonitor getRequiredMonitorService() {
         return BuildStepMonitor.NONE;
     }

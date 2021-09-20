@@ -8,8 +8,8 @@ public class VersionUtil {
         }
         String[] versions = version.split("\\.");
         if (versions.length == 3
-                && ((Integer.valueOf(versions[0]) == 0)
-                || (Integer.valueOf(versions[0]) == 1 && Integer.valueOf(versions[1]) < 2))) {
+                && ((Integer.parseInt(versions[0]) == 0)
+                || (Integer.parseInt(versions[0]) == 1 && Integer.parseInt(versions[1]) < 2))) {
             return true;
         }
         return false;
@@ -21,8 +21,8 @@ public class VersionUtil {
         }
         String[] versions = version.split("\\.");
         if (versions.length == 3
-                && Integer.valueOf(versions[0]) == 0
-                && Integer.valueOf(versions[1]) < 9) {
+                && Integer.parseInt(versions[0]) == 0
+                && Integer.parseInt(versions[1]) < 9) {
             return true;
         }
         return false;
@@ -34,9 +34,9 @@ public class VersionUtil {
         }
         String[] versions = version.split("\\.");
         if (versions.length == 3
-                && Integer.valueOf(versions[0]) == 0
-                && ((Integer.valueOf(versions[1]) < 8)
-                || (Integer.valueOf(versions[1]) == 8 && Integer.valueOf(versions[2]) < 1))) {
+                && Integer.parseInt(versions[0]) == 0
+                && ((Integer.parseInt(versions[1]) < 8)
+                || (Integer.parseInt(versions[1]) == 8 && Integer.parseInt(versions[2]) < 1))) {
             return true;
         }
         return false;

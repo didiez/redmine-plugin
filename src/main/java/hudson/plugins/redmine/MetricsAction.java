@@ -18,14 +18,17 @@ public class MetricsAction implements Action {
         this.metricsList = metricsList;
     }
 
+    @Override
     public String getIconFileName() {
         return "notepad.png";
     }
 
+    @Override
     public String getDisplayName() {
         return Messages.ticket_metrics_detail();
     }
 
+    @Override
     public String getUrlName() {
         return "ticketMetrics";
     }

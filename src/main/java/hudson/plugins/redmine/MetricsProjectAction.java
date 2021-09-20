@@ -12,14 +12,17 @@ public class MetricsProjectAction implements Action {
         this.project = project;
     }
 
+    @Override
     public String getIconFileName() {
         return "graph.gif";
     }
 
+    @Override
     public String getDisplayName() {
         return Messages.ticket_metrics();
     }
 
+    @Override
     public String getUrlName() {
         return "metricsProject";
     }

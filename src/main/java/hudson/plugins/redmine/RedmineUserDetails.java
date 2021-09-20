@@ -1,13 +1,15 @@
 package hudson.plugins.redmine;
 
-import org.acegisecurity.GrantedAuthority;
-import org.acegisecurity.userdetails.UserDetails;
+import java.util.Collection;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 
 public class RedmineUserDetails implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
-    private GrantedAuthority[] authorities;
+    private Collection<? extends GrantedAuthority> authorities;
     private String password;
     private String username;
     private boolean accountNotExpired;
@@ -27,7 +29,7 @@ public class RedmineUserDetails implements UserDetails {
      */
     public RedmineUserDetails(String username, String password, boolean enabled,
             boolean accountNonExpired, boolean credentialsNonExpired,
-            boolean accountNonLocked, GrantedAuthority[] authorities) {
+            boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
         this.username = username;
         this.password = password;
         this.enabled = enabled;
@@ -37,30 +39,37 @@ public class RedmineUserDetails implements UserDetails {
         this.authorities = authorities;
     }
 
-    public GrantedAuthority[] getAuthorities() {
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
+    @Override
     public String getUsername() {
         return username;
     }
 
+    @Override
     public boolean isAccountNonExpired() {
         return accountNotExpired;
     }
 
+    @Override
     public boolean isAccountNonLocked() {
         return accountNotLocked;
     }
 
+    @Override
     public boolean isCredentialsNonExpired() {
         return credentialsNotExpired;
     }
 
+    @Override
     public boolean isEnabled() {
         return enabled;
     }
